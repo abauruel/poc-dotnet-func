@@ -12,7 +12,7 @@ on:
 env:
     DOTNET_VERSION: ${{ inputs.dotnet-version }}
 jobs:
-    call-build:
+    Build:
         runs-on: ubuntu-latest
         steps:
         - name: "Checkout Github Action"
@@ -24,10 +24,11 @@ jobs:
             dotnet-version: ${{ env.DOTNET_VERSION}}
 
         - name: "Build"
-          run: "dotnet build --verbosity m --no-restore --output ./target"
+          run: "dotnet build --verbosity m  --output ./target"
 
         - name: "Test"
-          run: 'dotnet test --collect:"CPlat Code Coverage;Format=opencover" --verbosity n --no-build --output ./target --results-directory ./couverage'
+          run: 'dotnet test --collect:"XPlat Code Coverage;Format=opencover" --verbosity m --no-build --output ./target --results-directory ./couverage'
+          # run: 'dotnet test --collect:"XPlat Code Coverage;Format=opencover" --verbosity n --no-build --output ./target --results-directory ./couverage'
 
 
     Release:
@@ -36,6 +37,6 @@ jobs:
 
         ## Generate nuget package
         - name: "Pack"
-          run: 'dotnet pack --no-build -c Release'
+          run: 'dotnet pack --verbosity m  --no-build -c Release --output ./package '
 
   
