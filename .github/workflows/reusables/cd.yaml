@@ -1,0 +1,41 @@
+name: cd
+
+on:
+
+    workflow_call:
+        inputs:
+            dotnet-version:
+                type: string
+                default: '8.0.x'
+                description: 'Runtime version'
+
+env:
+    DOTNET_VERSION: ${{ inputs.dotnet-version }}
+    AZURE_FUNCTION_APP_PACKAGE_PATH: .
+    AZURE_FUNCTION_APP_NAME: 'HttpTrigger'
+
+jobs:
+    call-cd:
+        runs-on: 'ubuntu-latest'
+        steps:
+            - name: 'Checkout Github Action'
+              uses: actions/checkout@v3
+            
+            - name: 'Setup Dotnet ${{env.DOTNET_VERSION}}'
+              uses: actions/setup-dotnet@v3
+              with: 
+                dotnet-version: ${{ env.DOTNET_VERSION}}
+            - name: 'Resolve project dependencies using dotnet'
+              shell: bash
+              run: |
+               pushd './${{ env.AZURE_FUNCTION_APP_PACKAGE_PATH }}'
+               dotnet build --configuration Release --output ./output
+               popd
+
+            - name: 'Run Azure Function Action'
+              uses: Azure/functions-actions@v1
+              id: fa
+              with:
+                app-name: ${{ env.AZURE_FUNCTION_APP_PACKAGE_PATH}}
+                package: '${{ env.AZURE_FUNCTION_APP_PACKAGE_PATH}}/output'
+                publish-profile: ${{ secrets.AZURE_FUNCTION_APP_PUBLISH_PROFILE}}

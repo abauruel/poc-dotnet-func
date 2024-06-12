@@ -1,0 +1,36 @@
+name: dotnet function
+on:
+   
+    workflow_dispatch:
+        inputs:
+            dotnet-version:
+                description: 'Runtime version'
+                type: choice
+                options:
+                    - '6.0.x'
+                    - '8.0.x'
+                default: '8.0.x'
+                required: true
+
+            enable-ci:
+                type: boolean
+                default: true
+                required: true
+
+            enable-cd:
+                type: boolean
+                default: true
+                required: true
+jobs:
+    ci:
+        if: ${{ inputs.enable-ci }}
+        uses: '${{ github.workflow_ref }}/reusables/ci.yaml'
+        with:
+            dotnet-version: ${{inputs.dotnet-version || inputs.dotnet-version.default}}
+        secrets: inherit
+    cd:
+        if: ${{ inputs.enable-cd }}
+        uses: '${{ github.workflow_ref }}/.github/workflows/cd.yaml'
+        with:
+            dotnet-version: ${{inputs.dotnet-version || '8.0.x'}}
+        secrets: inherit

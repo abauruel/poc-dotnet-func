@@ -1,0 +1,41 @@
+name: ci
+
+on:
+
+  workflow_call:
+        inputs:
+            dotnet-version:
+                type: string
+                default: '8.0.x'
+                description: 'Runtime version'
+
+env:
+    DOTNET_VERSION: ${{ inputs.dotnet-version }}
+jobs:
+    call-build:
+        runs-on: ubuntu-latest
+        steps:
+        - name: "Checkout Github Action"
+          uses: actions/checkout@v3
+        
+        - name: Stepup dotnet ${{ env.DOTNET_VERSION }}
+          uses: actions/setup-dotnet@v3
+          with: 
+            dotnet-version: ${{ env.DOTNET_VERSION}}
+
+        - name: "Build"
+          uses: "dotnet build --verbosity m --no-restore --output ./target"
+
+        - name: "Test"
+          uses: 'dotnet test --collect:"CPlat Code Coverage;Format=opencover" --verbosity n --no-build --output ./target --results-directory ./couverage'
+
+
+    Release:
+        runs-on: ubuntu-latest
+        steps:
+
+        ## Generate nuget package
+        - name: "Pack"
+          uses: 'dotnet pack --no-build -c Release'
+
+  
