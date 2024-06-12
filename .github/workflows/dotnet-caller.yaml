@@ -23,13 +23,13 @@ on:
 jobs:
     ci:
         if: ${{ inputs.enable-ci }}
-        uses: './reusables/ci.yaml'
+        uses: 'https://github.com/abauruel/poc-dotnet-func/.github/workflows/reusables/ci.yaml'
         with:
             dotnet-version: ${{inputs.dotnet-version || inputs.dotnet-version.default}}
         secrets: inherit
     cd:
         if: ${{ inputs.enable-cd }}
-        uses: './reusables/cd.yaml'
+        uses: 'https://github.com/abauruel/poc-dotnet-func/.github/workflows/reusables/cd.yaml'
         with:
             dotnet-version: ${{inputs.dotnet-version || '8.0.x'}}
         secrets: inherit
