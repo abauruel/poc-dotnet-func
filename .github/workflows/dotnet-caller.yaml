@@ -21,15 +21,21 @@ on:
                 default: true
                 required: true
 jobs:
-    ci:
+    starts:
+        runs-on: 'ubuntu-latest'
+        steps:
+            - name: log
+              run: ${{github.workflow_ref}}
+
+    call-ci:
         if: ${{ inputs.enable-ci }}
-        uses: 'ci.yaml@main'
+        uses: './.github/workflows/ci.yaml'
         with:
             dotnet-version: ${{inputs.dotnet-version || inputs.dotnet-version.default}}
         secrets: inherit
-    cd:
+    call-cd:
         if: ${{ inputs.enable-cd }}
-        uses: 'cd.yaml@main'
+        uses: './.github/workflows/cd.yaml'
         with:
-            dotnet-version: ${{inputs.dotnet-version || '8.0.x'}}
+            dotnet-version: ${{inputs.dotnet-version || inputs.dotnet-version.default}}
         secrets: inherit
