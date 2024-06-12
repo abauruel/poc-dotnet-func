@@ -35,6 +35,8 @@ jobs:
         runs-on: ubuntu-latest
         needs: [Build]
         steps:
+        - name: "Checkout Github Action"
+          uses: actions/checkout@v3
 
         ## Generate nuget package
         - name: "Pack"
