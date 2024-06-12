@@ -23,13 +23,13 @@ on:
 jobs:
     ci:
         if: ${{ inputs.enable-ci }}
-        uses: '${{ github.workflow_ref }}/reusables/ci.yaml@main'
+        uses: '${{ github.workflow_ref }}/ci.yaml@main'
         with:
             dotnet-version: ${{inputs.dotnet-version || inputs.dotnet-version.default}}
         secrets: inherit
     cd:
         if: ${{ inputs.enable-cd }}
-        uses: '${{ github.workflow_ref }}/.github/workflows/cd.yaml@main'
+        uses: '${{ github.workflow_ref }}/cd.yaml@main'
         with:
             dotnet-version: ${{inputs.dotnet-version || '8.0.x'}}
         secrets: inherit
