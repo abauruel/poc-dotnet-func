@@ -33,6 +33,7 @@ jobs:
 
     Release:
         runs-on: ubuntu-latest
+        needs: [Build]
         steps:
 
         ## Generate nuget package
