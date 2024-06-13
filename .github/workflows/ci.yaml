@@ -18,7 +18,7 @@ jobs:
         - name: "Checkout Github Action"
           uses: actions/checkout@v3
         
-        - name: Stepup dotnet ${{ env.DOTNET_VERSION }}
+        - name: Setup dotnet ${{ env.DOTNET_VERSION }}
           uses: actions/setup-dotnet@v3
           with: 
             dotnet-version: ${{ env.DOTNET_VERSION}}
@@ -37,9 +37,14 @@ jobs:
         steps:
         - name: "Checkout Github Action"
           uses: actions/checkout@v3
+        
+        - name: Setup dotnet ${{ env.DOTNET_VERSION }}
+          uses: actions/setup-dotnet@v3
+          with: 
+            dotnet-version: ${{ env.DOTNET_VERSION}}
 
         ## Generate nuget package
         - name: "Pack"
-          run: 'dotnet pack --verbosity m  --no-build -c Release --output ./package '
+          run: 'dotnet pack --verbosity m  -c Release --output ./package '
 
   
