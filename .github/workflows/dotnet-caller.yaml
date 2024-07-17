@@ -28,6 +28,7 @@ jobs:
             dotnet-version: ${{inputs.dotnet-version || inputs.dotnet-version.default}}
         secrets: inherit
     call-cd:
+        needs: call-ci
         if: ${{ inputs.enable-cd }}
         uses: './.github/workflows/cd.yaml'
         with:

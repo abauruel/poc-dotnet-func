@@ -12,7 +12,7 @@ on:
 env:
     DOTNET_VERSION: ${{ inputs.dotnet-version }}
     AZURE_FUNCTION_APP_PACKAGE_PATH: .
-    AZURE_FUNCTION_APP_NAME: 'HttpTrigger'
+    AZURE_FUNCTION_APP_NAME: 'dotnetfuncappalx'
 
 jobs:
     call-cd:
