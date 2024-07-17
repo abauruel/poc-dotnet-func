@@ -35,18 +35,19 @@ jobs:
           dotnet build --configuration Release --output ./output
           popd
       
-      - name: Login to Azure
-        uses: azure/login@v1
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_B2E9036FAE30453FA8A8562EA23C7A48 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_30D3A38275D5473BBE5F5E50846EB0A7 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_C0ABB3040F5D4A0897BA432BD2A95784 }}
+      - name: Azure Login
+        run: |
+          az login \
+            --service-principal \
+            --username ${{ vars.CLIENT_ID }} \
+            --password ${{ vars.CLIENT_SECRET }} \
+            --tenant ${{ vars.TENANT_ID }}
 
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1
         id: fa
         with:
-          app-name: 'poc-dotnet-func'
+          app-name: 'dotnetfuncappalx'
           slot-name: 'Production'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
           
